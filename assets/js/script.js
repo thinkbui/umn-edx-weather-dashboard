@@ -42,26 +42,33 @@ function processForecast(raw_data) {
   for(i=0;i<raw_data.length;i++){
     var data_date = dayjs.unix(raw_data[i]["dt"]).format("YYYYMMDD");
 
+    var raw_icon = parseIconCode(raw_data[i]["weather"][0]["icon"]);
     var raw_temp = raw_data[i]["main"]["temp"];
     var raw_wind = raw_data[i]["wind"]["speed"];
     var raw_humidity = raw_data[i]["main"]["humidity"];
 
     if (results[data_date]) {
+      var prev_icon = results[data_date]["icon"];
       var prev_temp = results[data_date]["temp"];
       var prev_wind = results[data_date]["wind"];
       var prev_humidity = results[data_date]["humidity"];
 
+      results[data_date]["icon"] = prev_icon < raw_icon ? raw_icon : prev_icon;
       results[data_date]["temp"] = prev_temp < raw_temp ? raw_temp : prev_temp;
       results[data_date]["wind"] = prev_wind < raw_wind ? raw_wind : prev_wind;
       results[data_date]["humidity"] = prev_humidity < raw_humidity ? raw_humidity : prev_humidity;
     } else {
     var raw_date = dayjs.unix(raw_data[i]["dt"]).format("MM/DD/YYYY");
-    results[data_date] = {"date":raw_date, "temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
+    results[data_date] = {"date":raw_date, "icon":raw_icon, "temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
     }
   }
   console.log(results);
   final_data = results;
   displayForecast(results);
+}
+
+function parseIconCode(code) {
+  return parseInt(code);
 }
 
 function displayForecast(forecast_data) {
@@ -73,7 +80,7 @@ function displayForecast(forecast_data) {
 
 function displayToday(date, forecast_data) {
   var bfElem = document.getElementById("bf");
-  displayData(bfElem, forecast_data[date]);
+  displayData(bfElem, forecast_data[date], true);
   console.log(forecast_data[date]);
 }
 
@@ -81,13 +88,16 @@ function displayDays(dates, forecast_data) {
   for(i=0;i<dates.length;i++){
     console.log(forecast_data[dates[i]]);
     var sfElem = document.getElementById(`sf${i+1}`);
-    displayData(sfElem, forecast_data[dates[i]]);
+    displayData(sfElem, forecast_data[dates[i]], false);
   }
 }
 
-function displayData(elem, data) {
+function displayData(elem, data, bigIcon) {
   var dateElem = elem.getElementsByClassName("date_val")[0];
   dateElem.textContent = data["date"];
+
+  var iconElem = elem.getElementsByTagName("img")[0];
+  iconElem.src = bigIcon ? iconBigSrc(data["icon"]) : iconSrc(data["icon"]);
 
   var tempElem = elem.getElementsByClassName("temp_val")[0];
   tempElem.textContent = data["temp"];
@@ -97,6 +107,18 @@ function displayData(elem, data) {
 
   var humidityElem = elem.getElementsByClassName("humidity_val")[0];
   humidityElem.textContent = data["humidity"];
+}
+
+function iconSrc(code) {
+  return `https://openweathermap.org/img/wn/${iconCodePad(code)}d.png`
+}
+
+function iconBigSrc(code) {
+  return `https://openweathermap.org/img/wn/${iconCodePad(code)}d@2x.png`
+}
+
+function iconCodePad(code) {
+  return code.toString().padStart(2,'0');
 }
 
 getCityForecast(qParam);
