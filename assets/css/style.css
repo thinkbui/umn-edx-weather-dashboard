@@ -1,7 +1,7 @@
 header {
   width: 100%;
   text-align: center;
-  background-color: blue;
+  background-color: #AAAAAA;
 }
 
 h1 {
@@ -9,22 +9,12 @@ h1 {
   font-weight: bolder;
 }
 
-section {
-  background-color: red;
-}
-
 .form {
   width: 40%;
   margin: 0 auto;
-  background-color: green;
-}
-
-article {
-  background-color: yellow;
 }
 
 .big_forecast {
-  background-color: purple;
   width: 100%;
   padding: 10px;
 }
@@ -47,7 +37,6 @@ article {
 }
 
 .small_forecast {
-  /* background-color: brown; */
   border: 1px solid black;
   padding: 10px;
 }
