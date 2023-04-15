@@ -51,17 +51,8 @@ function processForecast(raw_data) {
       var prev_humidity = results[data_date]["humidity"];
 
       results[data_date]["temp"] = prev_temp < raw_temp ? raw_temp : prev_temp;
-      // if ( prev_temp < raw_temp ) {
-        // results[data_date]["temp"] = raw_temp;
-      // }
       results[data_date]["wind"] = prev_wind < raw_wind ? raw_wind : prev_wind;
-      // if ( prev_wind < raw_wind ){
-        // results[data_date]["wind"] = raw_wind;
-      // }
       results[data_date]["humidity"] = prev_humidity < raw_humidity ? raw_humidity : prev_humidity;
-      // if ( prev_humidity < raw_humidity ){
-        // results[data_date]["humidity"] = raw_humidity;
-      // }
     } else {
       results[data_date] = {"temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
     }
