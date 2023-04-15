@@ -61,6 +61,42 @@ function processForecast(raw_data) {
   }
   console.log(results);
   final_data = results;
+  displayForecast(results);
+}
+
+function displayForecast(forecast_data) {
+  var data_dates = Object.keys(forecast_data).sort();
+  var data_date_today = data_dates.shift();
+  displayToday(data_date_today, forecast_data)
+  displayDays(data_dates, forecast_data)
+}
+
+function displayToday(date, forecast_data) {
+  var bfElem = document.getElementById("bf");
+  displayData(bfElem, forecast_data[date]);
+  console.log(forecast_data[date]);
+}
+
+function displayDays(dates, forecast_data) {
+  for(i=0;i<dates.length;i++){
+    console.log(forecast_data[dates[i]]);
+    var sfElem = document.getElementById(`sf${i+1}`);
+    displayData(sfElem, forecast_data[dates[i]]);
+  }
+}
+
+function displayData(elem, data) {
+  var dateElem = elem.getElementsByClassName("date_val")[0];
+  dateElem.textContent = data["date"];
+
+  var tempElem = elem.getElementsByClassName("temp_val")[0];
+  tempElem.textContent = data["temp"];
+
+  var windElem = elem.getElementsByClassName("wind_val")[0];
+  windElem.textContent = data["wind"];
+
+  var humidityElem = elem.getElementsByClassName("humidity_val")[0];
+  humidityElem.textContent = data["humidity"];
 }
 
 getCityForecast(qParam);
