@@ -40,7 +40,8 @@ function getForcast(coord) {
 function processForecast(raw_data) {
   results = {};
   for(i=0;i<raw_data.length;i++){
-    var data_date = dayjs.unix(raw_data[i]["dt"]).format("MM/DD/YYYY");
+    var data_date = dayjs.unix(raw_data[i]["dt"]).format("YYYYMMDD");
+
     var raw_temp = raw_data[i]["main"]["temp"];
     var raw_wind = raw_data[i]["wind"]["speed"];
     var raw_humidity = raw_data[i]["main"]["humidity"];
@@ -54,7 +55,8 @@ function processForecast(raw_data) {
       results[data_date]["wind"] = prev_wind < raw_wind ? raw_wind : prev_wind;
       results[data_date]["humidity"] = prev_humidity < raw_humidity ? raw_humidity : prev_humidity;
     } else {
-      results[data_date] = {"temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
+    var raw_date = dayjs.unix(raw_data[i]["dt"]).format("MM/DD/YYYY");
+    results[data_date] = {"date":raw_date, "temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
     }
   }
   console.log(results);
