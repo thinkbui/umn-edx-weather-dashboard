@@ -1,7 +1,7 @@
 header {
   width: 100%;
   text-align: center;
-  background-color: blue;
+  background-color: #AAAAAA;
 }
 
 h1 {
@@ -9,16 +9,43 @@ h1 {
   font-weight: bolder;
 }
 
-section {
-  background-color: red;
-}
-
 .form {
   width: 40%;
   margin: 0 auto;
-  background-color: green;
 }
 
-article {
-  background-color: yellow;
+.big_forecast {
+  width: 100%;
+  padding: 10px;
+}
+
+.big_forecast .date_val {
+  font-size: 30px;
+  font-weight: bolder;
+}
+
+.big_forecast .forecast_detail {
+  font-size: 20px;
+}
+
+.small_forecast_container {
+  display: grid;
+  align-content: space-evenly;
+  grid-template-columns: auto auto auto auto auto;
+  gap: 10px;
+  padding: 10px;
+}
+
+.small_forecast {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.small_forecast .date_val {
+  font-size: 15px;
+  font-weight: bolder;
+}
+
+.small_forecast .forecast_detail {
+  font-size: 15px;
 }

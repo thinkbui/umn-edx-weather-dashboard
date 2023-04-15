@@ -40,7 +40,8 @@ function getForcast(coord) {
 function processForecast(raw_data) {
   results = {};
   for(i=0;i<raw_data.length;i++){
-    var data_date = dayjs.unix(raw_data[i]["dt"]).format("MM/DD/YYYY");
+    var data_date = dayjs.unix(raw_data[i]["dt"]).format("YYYYMMDD");
+
     var raw_temp = raw_data[i]["main"]["temp"];
     var raw_wind = raw_data[i]["wind"]["speed"];
     var raw_humidity = raw_data[i]["main"]["humidity"];
@@ -54,11 +55,48 @@ function processForecast(raw_data) {
       results[data_date]["wind"] = prev_wind < raw_wind ? raw_wind : prev_wind;
       results[data_date]["humidity"] = prev_humidity < raw_humidity ? raw_humidity : prev_humidity;
     } else {
-      results[data_date] = {"temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
+    var raw_date = dayjs.unix(raw_data[i]["dt"]).format("MM/DD/YYYY");
+    results[data_date] = {"date":raw_date, "temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
     }
   }
   console.log(results);
   final_data = results;
+  displayForecast(results);
+}
+
+function displayForecast(forecast_data) {
+  var data_dates = Object.keys(forecast_data).sort();
+  var data_date_today = data_dates.shift();
+  displayToday(data_date_today, forecast_data)
+  displayDays(data_dates, forecast_data)
+}
+
+function displayToday(date, forecast_data) {
+  var bfElem = document.getElementById("bf");
+  displayData(bfElem, forecast_data[date]);
+  console.log(forecast_data[date]);
+}
+
+function displayDays(dates, forecast_data) {
+  for(i=0;i<dates.length;i++){
+    console.log(forecast_data[dates[i]]);
+    var sfElem = document.getElementById(`sf${i+1}`);
+    displayData(sfElem, forecast_data[dates[i]]);
+  }
+}
+
+function displayData(elem, data) {
+  var dateElem = elem.getElementsByClassName("date_val")[0];
+  dateElem.textContent = data["date"];
+
+  var tempElem = elem.getElementsByClassName("temp_val")[0];
+  tempElem.textContent = data["temp"];
+
+  var windElem = elem.getElementsByClassName("wind_val")[0];
+  windElem.textContent = data["wind"];
+
+  var humidityElem = elem.getElementsByClassName("humidity_val")[0];
+  humidityElem.textContent = data["humidity"];
 }
 
 getCityForecast(qParam);
