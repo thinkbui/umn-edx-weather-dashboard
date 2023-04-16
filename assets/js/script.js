@@ -2,8 +2,6 @@ var apiKey = "f8c008ebc30e5059d679aa6a57e4b627";
 var search_history = document.getElementsByClassName("search_history")[0].getElementsByTagName("ul")[0];
 var qParam = "Minneapolis";
 
-var final_data;
-
 function getCityForecast(queryParam) {
   var url = new URL("http://api.openweathermap.org/geo/1.0/direct")
   url.searchParams.set("q", queryParam);
@@ -11,11 +9,9 @@ function getCityForecast(queryParam) {
   
   fetch(url.href)
   .then(function(response){
-    console.log(response);
     return response.json();
   })
   .then(function(data){
-    console.log(data);
     addSearchHistory(queryParam);
     if(data.length > 0){
       setCityName(data[0]["name"], data[0]["state"]);
@@ -56,11 +52,9 @@ function getForcast(coord) {
   
   fetch(url2.href)
   .then(function(response){
-    console.log(response);
     return response.json();
   })
   .then(function(data){
-    console.log(data);
     processForecast(data["list"]);
   })
 }
@@ -85,8 +79,6 @@ function processForecast(raw_data) {
     results[data_date] = {"date":raw_date, "icon":raw_icon, "temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
     }
   }
-  console.log(results);
-  final_data = results;
   displayForecast(results);
 }
 
@@ -104,12 +96,10 @@ function displayForecast(forecast_data) {
 function displayToday(date, forecast_data) {
   var bfElem = document.getElementById("bf");
   displayData(bfElem, forecast_data[date], true);
-  console.log(forecast_data[date]);
 }
 
 function displayDays(dates, forecast_data) {
   for(i=0;i<dates.length;i++){
-    console.log(forecast_data[dates[i]]);
     var sfElem = document.getElementById(`sf${i+1}`);
     displayData(sfElem, forecast_data[dates[i]], false);
   }
