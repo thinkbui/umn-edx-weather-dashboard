@@ -15,8 +15,18 @@ function getCityForecast(queryParam) {
   })
   .then(function(data){
     console.log(data);
+    setCityName(data[0]["name"], data[0]["state"]);
     getForcast({lat: data[0]["lat"], lon: data[0]["lon"]});
   })
+}
+
+function setCityName(city_name, state_name) {
+  var cityNameElem = document.getElementById("city_name");
+  var cName = city_name;
+  if (state_name) {
+    cName += `, ${state_name}`;
+  }
+  cityNameElem.textContent = cName;
 }
 
 function getForcast(coord) {
