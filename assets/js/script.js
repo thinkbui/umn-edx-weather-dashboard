@@ -113,6 +113,7 @@ function displayDays(dates, forecast_data) {
     var sfElem = document.getElementById(`sf${i+1}`);
     displayData(sfElem, forecast_data[dates[i]], false);
   }
+  setDay5Visibility(dates.length)
 }
 
 function displayData(elem, data, bigIcon) {
@@ -142,6 +143,15 @@ function iconBigSrc(code) {
 
 function iconCodePad(code) {
   return code.toString().padStart(2,'0');
+}
+
+function setDay5Visibility(forecast_length) {
+  var sf5Elem = document.getElementById("sf5");
+  var visibility = "hidden";
+  if(forecast_length == 5) {
+    visibility = "visible";
+  }
+  sf5Elem.setAttribute("style", `visibility:${visibility}`);
 }
 
 document.getElementById("search_btn").addEventListener("click", function(event){
