@@ -2,6 +2,11 @@ var apiKey = "f8c008ebc30e5059d679aa6a57e4b627";
 var search_history = document.getElementsByClassName("search_history")[0].getElementsByTagName("ul")[0];
 var qParam = "Minneapolis";
 
+// This function makes the API call to fetch the queried city.
+// If one or more matching cities are found, the geographic coordinates are
+// used to fetch the weather data for the most likely city based upon how
+// the response sorts them.
+// If no city is found, an alert box pops up and no further call is made.
 function getCityForecast(queryParam) {
   var url = new URL("https://api.openweathermap.org/geo/1.0/direct")
   url.searchParams.set("q", queryParam);
@@ -22,6 +27,8 @@ function getCityForecast(queryParam) {
   })
 }
 
+// This adds the query to the top of the search history area.
+// It is generated as a clickable link that re-runs the query.
 function addSearchHistory(queryParam) {
   var aElem = document.createElement("a");
   aElem.setAttribute("href", "#");
@@ -34,6 +41,8 @@ function addSearchHistory(queryParam) {
   search_history.prepend(liElem);
 }
 
+// Sets the display name for the queried city.
+// If there is a state name, that is displayed too.
 function setCityName(city_name, state_name) {
   var cityNameElem = document.getElementById("city_name");
   var cName = city_name;
@@ -43,6 +52,9 @@ function setCityName(city_name, state_name) {
   cityNameElem.textContent = cName;
 }
 
+// This function makes the API call to fetch the weather forecast based
+// upon geographic coordinates.
+// The option to set units to imperial is hardcoded for now.
 function getForcast(coord) {
   var url2 = new URL("https://api.openweathermap.org/data/2.5/forecast")
   url2.searchParams.set("lat", coord["lat"]);
@@ -59,6 +71,10 @@ function getForcast(coord) {
   })
 }
 
+// This processes the weather data condensing 3-hour blocks into full days.
+// It simply takes the max values for temperature, wind speed, and humidity
+// over each 24 hour period.
+// Similar logic is used to crudely determine which icon is used.
 function processForecast(raw_data) {
   results = {};
   for(i=0;i<raw_data.length;i++){
@@ -75,17 +91,19 @@ function processForecast(raw_data) {
       results[data_date]["wind"] = Math.max(results[data_date]["wind"], raw_wind);
       results[data_date]["humidity"] = Math.max(results[data_date]["humidity"], raw_humidity);
     } else {
-    var raw_date = dayjs.unix(raw_data[i]["dt"]).format("MM/DD/YYYY");
-    results[data_date] = {"date":raw_date, "icon":raw_icon, "temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
+      var raw_date = dayjs.unix(raw_data[i]["dt"]).format("MM/DD/YYYY");
+      results[data_date] = {"date":raw_date, "icon":raw_icon, "temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
     }
   }
   displayForecast(results);
 }
 
+// Helper to parse an icon code as an integer for comparison purposes
 function parseIconCode(code) {
   return parseInt(code);
 }
 
+// Main function to populate the page with the processed weather data
 function displayForecast(forecast_data) {
   var data_dates = Object.keys(forecast_data).sort();
   var data_date_today = data_dates.shift();
@@ -93,11 +111,13 @@ function displayForecast(forecast_data) {
   displayDays(data_dates, forecast_data)
 }
 
+// Populates today's weather data in the large container
 function displayToday(date, forecast_data) {
   var bfElem = document.getElementById("bf");
   displayData(bfElem, forecast_data[date], true);
 }
 
+// Populates the future weather data in the smaller containers
 function displayDays(dates, forecast_data) {
   for(i=0;i<dates.length;i++){
     var sfElem = document.getElementById(`sf${i+1}`);
@@ -106,12 +126,13 @@ function displayDays(dates, forecast_data) {
   setDay5Visibility(dates.length)
 }
 
+// Helper function to populate each day's weather data
 function displayData(elem, data, bigIcon) {
   var dateElem = elem.getElementsByClassName("date_val")[0];
   dateElem.textContent = data["date"];
 
   var iconElem = elem.getElementsByTagName("img")[0];
-  iconElem.src = bigIcon ? iconBigSrc(data["icon"]) : iconSrc(data["icon"]);
+  iconElem.src = iconSrc(data["icon"], bigIcon);
 
   var tempElem = elem.getElementsByClassName("temp_val")[0];
   tempElem.textContent = Math.round(data["temp"]);
@@ -123,18 +144,19 @@ function displayData(elem, data, bigIcon) {
   humidityElem.textContent = Math.round(data["humidity"]);
 }
 
-function iconSrc(code) {
-  return `https://openweathermap.org/img/wn/${iconCodePad(code)}d.png`
+// Builds the icon URL based upon code and size
+function iconSrc(code, bigIcon) {
+  var iconSize = bigIcon ? "@2x" : "";
+  return `https://openweathermap.org/img/wn/${iconCodePad(code)}d${iconSize}.png`
 }
 
-function iconBigSrc(code) {
-  return `https://openweathermap.org/img/wn/${iconCodePad(code)}d@2x.png`
-}
-
+// Ensures the icon URL builder uses 2-digit code
 function iconCodePad(code) {
   return code.toString().padStart(2,'0');
 }
 
+// Sets the visibility of the 5th day of the forecast depending on whether
+// data for it is present
 function setDay5Visibility(forecast_length) {
   var sf5Elem = document.getElementById("sf5");
   var visibility = "hidden";
@@ -151,6 +173,7 @@ document.getElementById("search_btn").addEventListener("click", function(event){
   getCityForecast(search_text);
 })
 
+// Resets the search form when a query is performed
 function clearForm() {
   document.getElementById("search_input").value = "";
 }
