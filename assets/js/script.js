@@ -104,6 +104,7 @@ function parseIconCode(code) {
 }
 
 // Main function to populate the page with the processed weather data
+// Sorting of keys is a safeguard to ensure they are sequential
 function displayForecast(forecast_data) {
   var data_dates = Object.keys(forecast_data).sort();
   var data_date_today = data_dates.shift();
