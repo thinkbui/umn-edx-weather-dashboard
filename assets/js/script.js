@@ -159,10 +159,7 @@ function iconCodePad(code) {
 // data for it is present
 function setDay5Visibility(forecast_length) {
   var sf5Elem = document.getElementById("sf5");
-  var visibility = "hidden";
-  if(forecast_length == 5) {
-    visibility = "visible";
-  }
+  var visibility = forecast_length == 5 ? "visible" : "hidden";
   sf5Elem.setAttribute("style", `visibility:${visibility}`);
 }
 
