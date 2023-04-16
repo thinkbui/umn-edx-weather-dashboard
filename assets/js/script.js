@@ -3,7 +3,7 @@ var search_history = document.getElementsByClassName("search_history")[0].getEle
 var qParam = "Minneapolis";
 
 function getCityForecast(queryParam) {
-  var url = new URL("http://api.openweathermap.org/geo/1.0/direct")
+  var url = new URL("https://api.openweathermap.org/geo/1.0/direct")
   url.searchParams.set("q", queryParam);
   url.searchParams.set("appid", apiKey);
   
@@ -44,7 +44,7 @@ function setCityName(city_name, state_name) {
 }
 
 function getForcast(coord) {
-  var url2 = new URL("http://api.openweathermap.org/data/2.5/forecast")
+  var url2 = new URL("https://api.openweathermap.org/data/2.5/forecast")
   url2.searchParams.set("lat", coord["lat"]);
   url2.searchParams.set("lon", coord["lon"]);
   url2.searchParams.set("units", "imperial");
