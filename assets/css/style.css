@@ -50,6 +50,7 @@ form button {
 h2 {
   font-size: 40px;
   font-weight: bolder;
+  padding-left: 10px;
 }
 
 .big_forecast {
