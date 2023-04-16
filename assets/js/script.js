@@ -1,4 +1,5 @@
 var apiKey = "f8c008ebc30e5059d679aa6a57e4b627";
+var search_history = document.getElementsByClassName("search_history")[0].getElementsByTagName("ul")[0];
 var qParam = "Minneapolis";
 
 var final_data;
@@ -15,9 +16,22 @@ function getCityForecast(queryParam) {
   })
   .then(function(data){
     console.log(data);
+    addSearchHistory(queryParam);
     setCityName(data[0]["name"], data[0]["state"]);
     getForcast({lat: data[0]["lat"], lon: data[0]["lon"]});
   })
+}
+
+function addSearchHistory(queryParam) {
+  var aElem = document.createElement("a");
+  aElem.setAttribute("href", "#");
+  aElem.setAttribute("onclick", `getCityForecast("${queryParam}")`);
+  aElem.textContent = queryParam;
+
+  var liElem = document.createElement("li");
+  liElem.prepend(aElem);
+
+  search_history.prepend(liElem);
 }
 
 function setCityName(city_name, state_name) {
@@ -134,7 +148,12 @@ function iconCodePad(code) {
 document.getElementById("search_btn").addEventListener("click", function(event){
   event.preventDefault();
   var search_text = document.getElementById("search_input").value;
+  clearForm();
   getCityForecast(search_text);
 })
+
+function clearForm() {
+  document.getElementById("search_input").value = "";
+}
 
 getCityForecast(qParam);

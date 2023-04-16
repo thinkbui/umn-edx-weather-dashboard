@@ -17,12 +17,19 @@
     <h1>Weather Dashboard</h1>
   </header>
   <main>
-    <section>
+    <aside>
       <form id="search-form">
         <input id="search_input" type="text" placeholder="Enter a City">
         <button id="search_btn">Search</button>
       </form>
-    </section>
+      <div class="search_history_container">
+        <h3>Search History</h3>
+        <div class="search_history">
+          <ul>
+          </ul>
+        </div>
+      </div>
+    </aside>
     <article>
       <h2 id="city_name">City Name</h2>
       <div class="big_forecast" id="bf">

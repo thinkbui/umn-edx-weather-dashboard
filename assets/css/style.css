@@ -16,15 +16,34 @@ main {
   grid-template-areas: "sidebar content";
 }
 
-section {
+aside {
   grid-area: sidebar;
+}
+
+.search_history_container {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid black;
+}
+
+h3 {
+  font-weight: bolder;
+}
+
+.search_history_container li {
+  margin-top: 5px;
+}
+
+.search_history_container a {
+  color: #7A0019;
+  text-decoration: none;
 }
 
 article {
   grid-area: content;
 }
 
-button {
+form button {
   display: block;
 }
 
