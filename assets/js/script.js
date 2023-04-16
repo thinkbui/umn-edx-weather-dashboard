@@ -17,8 +17,12 @@ function getCityForecast(queryParam) {
   .then(function(data){
     console.log(data);
     addSearchHistory(queryParam);
-    setCityName(data[0]["name"], data[0]["state"]);
-    getForcast({lat: data[0]["lat"], lon: data[0]["lon"]});
+    if(data.length > 0){
+      setCityName(data[0]["name"], data[0]["state"]);
+      getForcast({lat: data[0]["lat"], lon: data[0]["lon"]});
+    } else {
+      alert("No city by that name could be found.");
+    }
   })
 }
 
