@@ -124,13 +124,13 @@ function displayData(elem, data, bigIcon) {
   iconElem.src = bigIcon ? iconBigSrc(data["icon"]) : iconSrc(data["icon"]);
 
   var tempElem = elem.getElementsByClassName("temp_val")[0];
-  tempElem.textContent = data["temp"];
+  tempElem.textContent = Math.round(data["temp"]);
 
   var windElem = elem.getElementsByClassName("wind_val")[0];
-  windElem.textContent = data["wind"];
+  windElem.textContent = Math.round(data["wind"]);
 
   var humidityElem = elem.getElementsByClassName("humidity_val")[0];
-  humidityElem.textContent = data["humidity"];
+  humidityElem.textContent = Math.round(data["humidity"]);
 }
 
 function iconSrc(code) {
