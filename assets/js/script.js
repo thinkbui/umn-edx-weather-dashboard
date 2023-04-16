@@ -131,4 +131,10 @@ function iconCodePad(code) {
   return code.toString().padStart(2,'0');
 }
 
+document.getElementById("search_btn").addEventListener("click", function(event){
+  event.preventDefault();
+  var search_text = document.getElementById("search_input").value;
+  getCityForecast(search_text);
+})
+
 getCityForecast(qParam);
