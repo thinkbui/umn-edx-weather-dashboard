@@ -76,15 +76,10 @@ function processForecast(raw_data) {
     var raw_humidity = raw_data[i]["main"]["humidity"];
 
     if (results[data_date]) {
-      var prev_icon = results[data_date]["icon"];
-      var prev_temp = results[data_date]["temp"];
-      var prev_wind = results[data_date]["wind"];
-      var prev_humidity = results[data_date]["humidity"];
-
-      results[data_date]["icon"] = prev_icon < raw_icon ? raw_icon : prev_icon;
-      results[data_date]["temp"] = prev_temp < raw_temp ? raw_temp : prev_temp;
-      results[data_date]["wind"] = prev_wind < raw_wind ? raw_wind : prev_wind;
-      results[data_date]["humidity"] = prev_humidity < raw_humidity ? raw_humidity : prev_humidity;
+      results[data_date]["icon"] = Math.max(results[data_date]["icon"], raw_icon);
+      results[data_date]["temp"] = Math.max(results[data_date]["temp"], raw_temp);
+      results[data_date]["wind"] = Math.max(results[data_date]["wind"], raw_wind);
+      results[data_date]["humidity"] = Math.max(results[data_date]["humidity"], raw_humidity);
     } else {
     var raw_date = dayjs.unix(raw_data[i]["dt"]).format("MM/DD/YYYY");
     results[data_date] = {"date":raw_date, "icon":raw_icon, "temp":raw_temp, "wind":raw_wind, "humidity": raw_humidity};
